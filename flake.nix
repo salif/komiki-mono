@@ -17,11 +17,22 @@
           sha256 = "sha256-ogAILIIBbTnwUYzUSdX6VIbbSo7kuXihDUOZpVo1fVQ=";
         };
 
-        lig = pkgs.fetchFromGitHub {
-          owner = "ToxicFrog";
-          repo = "Ligaturizer";
+        # Ligaturizer.
+        lig = pkgs.fetchgit {
+          url = "https://github.com/ToxicFrog/Ligaturizer";
           rev = "c4065187a544a8fab40826fc91db1c6180a2d342";
-          sha256 = "sha256-89/6xEBybIG9OfeOkwh8bwvQpp8+SOCbUxIlqbdkvqU=";
+          sha256 = "sha256-3gDD3jCyuXpb/V44RI+AgViqZ54gYN0fgdEvqSKyJdo=";
+          fetchSubmodules = true;
+          sparseCheckout = [
+            "fonts/fira"
+          ];
+        };
+
+        # Nerdfont Font Patcher.
+        nf = pkgs.fetchzip {
+          url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.0/FontPatcher.zip";
+          sha256 = "sha256-/poejiOvaG3/SufXuUbVuAVEHUXz2E22jZPGv7jH1TI=";
+          stripRoot = false;
         };
 
       in {
@@ -32,23 +43,58 @@
 
           nativeBuildInputs = with pkgs; [
             python311
-            python311Packages.fontforge
             fontforge
           ];
 
           buildPhase = ''
-            mkdir -p vendor build output
+            mkdir -p vendor output
 
             ln -sf "${cousine-font}" vendor/Cousine-Regular.ttf
             ln -sf "${comic-shans-font}" vendor/comic-shanns.otf
 
-            python generate.py output
+            TMP=$(mktemp -d)
+            python generate.py "$TMP"
 
+            # Patch Nerdfont symbols.
+            patchNF() {
+              local file_name="$1"
+              local ext="$2"
+
+              fontforge -script ${nf}/font-patcher -q \
+                --fontlogos --codicons --fontawesome --octicons --powersymbols --pomicons --powerline --powerlineextra --weather \
+                -out="$TMP" --makegroups -1 -ext "$ext" "$file_name"
+            }
+
+            # TTF.
+            patchNF "$TMP/komisch-mono-regular.ttf" "ttf"
+            patchNF "$TMP/komisch-mono-bold.ttf" "ttf"
+            # OTF.
+            patchNF "$TMP/komisch-mono-regular.ttf" "otf"
+            patchNF "$TMP/komisch-mono-bold.ttf" "otf"
+
+            # Ligaturize.
+            ligaturize() {
+              local file_name="$1"
+
+              fontforge -lang py -script ligaturize.py "$file_name" \
+                --output-dir="$pwd/output"  \
+                --output-name='komisch-mono' \
+                --prefix=""
+            }
+            pwd=$(pwd)
+            pushd ${lig} || exit
+            # TTF.
+            ligaturize "$TMP/KomischMono-Regular.ttf"
+            ligaturize "$TMP/KomischMono-Bold.ttf"
+            # OTF.
+            ligaturize "$TMP/KomischMono-Regular.otf"
+            ligaturize "$TMP/KomischMono-Bold.otf"
+            popd || exit
           '';
 
-          # installPhase = ''
-          #   install -m444 -Dt "$out" "build/"*.ttf
-          # '';
+          installPhase = ''
+            install -m444 -Dt "$out" "output/"*.{ttf,otf}
+          '';
         };
 
         defaultPackage = self.packages.${system}.komisch-mono;
