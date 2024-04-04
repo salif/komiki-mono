@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
   };
 
   outputs = { self, nixpkgs, flake-utils }:
@@ -78,7 +78,6 @@
 
               fontforge -lang py -script ligaturize.py "$file_name" \
                 --output-dir="$pwd/output"  \
-                --output-name='komisch-mono' \
                 --prefix=""
             }
             pwd=$(pwd)
