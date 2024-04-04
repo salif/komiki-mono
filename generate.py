@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 """
 Generates the Comic Mono font files based on Comic Shanns font.
@@ -17,12 +16,15 @@ import os
 import re
 import sys
 
-reload(sys)
-sys.setdefaultencoding('UTF8')
-
 import fontforge
 import psMat
 import unicodedata
+
+OUTDIR = sys.argv[1]
+
+if not os.path.isdir(OUTDIR):
+    print(f"Given path '{OUTDIR}' is not a directory!")
+    sys.exit(1)
 
 def height(font):
     return float(font.capHeight)
@@ -46,29 +48,32 @@ font = fontforge.open('vendor/comic-shanns.otf')
 ref = fontforge.open('vendor/Cousine-Regular.ttf')
 for g in font.glyphs():
     uni = g.unicode
-    category = unicodedata.category(unichr(uni)) if 0 <= uni <= sys.maxunicode else None
+    category = unicodedata.category(chr(uni)) if 0 <= uni <= sys.maxunicode else None
     if g.width > 0 and category not in ['Mn', 'Mc', 'Me']:
         target_width = 510
         if g.width != target_width:
             delta = target_width - g.width
-            g.left_side_bearing += delta / 2
-            g.right_side_bearing += delta - g.left_side_bearing
+            g.left_side_bearing = int(round(g.left_side_bearing + delta / 2.0))
+            g.right_side_bearing = int(round(g.right_side_bearing + delta - g.left_side_bearing))
             g.width = target_width
 
-font.familyname = 'Comic Mono'
-font.version = '0.1.1'
-font.comment = 'https://github.com/dtinth/comic-mono-font'
-font.copyright = 'https://github.com/dtinth/comic-mono-font/blob/master/LICENSE'
+font.familyname = 'Komisch Mono'
+font.version = '1.0.0'
+font.comment = 'https://github.com/marcelhas/komisch-mono-font'
+font.copyright = 'https://github.com/marcelhas/komisch-mono-font/blob/master/LICENSE'
 
 adjust_height(font, ref, 0.875)
 font.sfnt_names = [] # Get rid of 'Prefered Name' etc.
-font.fontname = 'ComicMono'
-font.fullname = 'Comic Mono'
-font.generate('ComicMono.ttf')
+font.fontname = 'KomischMono-Regular'
+font.fullname = 'Komisch Mono Regular'
+font.weight = 'Normal'
+font.os2_weight = 400
+font.generate(f'{OUTDIR}/komisch-mono-regular.ttf')
 
 font.selection.all()
-font.fontname = 'ComicMono-Bold'
-font.fullname = 'Comic Mono Bold'
+font.fontname = 'KomischMono-Bold'
+font.fullname = 'Komisch Mono Bold'
 font.weight = 'Bold'
+font.os2_weight = 700
 font.changeWeight(32, "LCG", 0, 0, "squish")
-font.generate('ComicMono-Bold.ttf')
+font.generate(f'{OUTDIR}/komisch-mono-bold.ttf')
