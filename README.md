@@ -8,9 +8,9 @@ The font family is called `Komiki Mono`.
 
 ## Download
 
-- [KomikiMono-Regular.otf]()
-- [KomikiMono-Bold.otf]()
-- [KomikiMonoZero-Regular.otf]()
+- [KomikiMono-Regular.otf](https://github.com/salif/komiki-mono/releases/download/v1.2024.812/KomikiMono-Regular.otf)
+- [KomikiMono-Bold.otf](https://github.com/salif/komiki-mono/releases/download/v1.2024.812/KomikiMono-Bold.otf)
+- [KomikiMonoZero-Regular.otf](https://github.com/salif/komiki-mono/releases/download/v1.2024.812/KomikiMonoZero-Regular.otf)
 
 ## Development
 
