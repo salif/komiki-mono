@@ -6,8 +6,13 @@
 
 The font family is called `Komiki Mono`.
 
+## Download
 
-## Rebuild
+- [KomikiMono-Regular.otf]()
+- [KomikiMono-Bold.otf]()
+- [KomikiMonoZero-Regular.otf]()
+
+## Development
 
 > Requires `just`.
 

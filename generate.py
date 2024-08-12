@@ -27,8 +27,7 @@ if not os.path.isdir(OUTDIR):
 def height(font):
     return float(font.capHeight)
 
-def adjust_height(source, template, scale):
-    source.selection.all()
+def adjust_height(source, template):
     source.transform(psMat.scale(height(template) / height(source)))
     for attr in ['ascent', 'descent',
                 'hhea_ascent', 'hhea_ascent_add',
@@ -40,9 +39,8 @@ def adjust_height(source, template, scale):
                 'os2_typodescent', 'os2_typodescent_add',
                 ]:
         setattr(source, attr, getattr(template, attr))
-    source.transform(psMat.scale(scale))
 
-font = fontforge.open(f'vendor/base.{EXT}')
+font = fontforge.open(f'vendor/base.otf')
 ref = fontforge.open(REF)
 for g in font.glyphs():
     uni = g.unicode
@@ -60,15 +58,28 @@ font.comment = 'https://github.com/salif/komiki-mono'
 font.copyright = 'https://github.com/salif/komiki-mono/blob/main/LICENSE'
 font.sfnt_names = []
 
-font.familyname = 'Komiki Mono Shanns'
-font.fontname = 'KomikiMonoShanns-Regular'
-font.fullname = 'Komiki Mono Shanns Regular'
-font.generate(f'{OUTDIR}/Komiki-mono-shanns.{EXT}')
+font.selection.all()
+adjust_height(font, ref)
+font.familyname = 'Komiki Mono Zero'
+font.fontname = 'KomikiMonoZero-Regular'
+font.fullname = 'Komiki Mono Zero Regular'
+font.weight = 'Normal'
+font.os2_weight = 400
+font.generate(f'{OUTDIR}/Komiki-mono-zero.{EXT}')
 
-adjust_height(font, ref, 1.125)
+font.selection.all()
+font.transform(psMat.scale(1.125))
 font.familyname = 'Komiki Mono'
 font.fontname = 'KomikiMono-Regular'
 font.fullname = 'Komiki Mono Regular'
 font.weight = 'Normal'
 font.os2_weight = 400
 font.generate(f'{OUTDIR}/Komiki-mono-regular.{EXT}')
+
+font.selection.all()
+font.fontname = 'KomikiMono-Bold'
+font.fullname = 'Komiki Mono Bold'
+font.weight = 'Bold'
+font.os2_weight = 700
+font.changeWeight(32, "LCG", 0, 0, "squish")
+font.generate(f'{OUTDIR}/Komiki-mono-bold.{EXT}')
