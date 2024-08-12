@@ -3,10 +3,6 @@
 """
 Generates the Comic Mono font files based on Comic Shanns font.
 
-Required files:
-- vendor/comic-shanns.otf
-- vendor/Cousine-Regular.ttf
-
 Based on:
 - monospacifier: https://github.com/cpitclaudel/monospacifier/blob/master/monospacifier.py
 - YosemiteAndElCapitanSystemFontPatcher: https://github.com/dtinth/YosemiteAndElCapitanSystemFontPatcher/blob/master/bin/patch
@@ -21,6 +17,8 @@ import psMat
 import unicodedata
 
 OUTDIR = sys.argv[1]
+EXT = sys.argv[2]
+REF = sys.argv[3]
 
 if not os.path.isdir(OUTDIR):
     print(f"Given path '{OUTDIR}' is not a directory!")
@@ -44,8 +42,8 @@ def adjust_height(source, template, scale):
         setattr(source, attr, getattr(template, attr))
     source.transform(psMat.scale(scale))
 
-font = fontforge.open('vendor/comic-shanns.otf')
-ref = fontforge.open('vendor/Cousine-Regular.ttf')
+font = fontforge.open(f'vendor/base.{EXT}')
+ref = fontforge.open(REF)
 for g in font.glyphs():
     uni = g.unicode
     category = unicodedata.category(chr(uni)) if 0 <= uni <= sys.maxunicode else None
@@ -57,23 +55,20 @@ for g in font.glyphs():
             g.right_side_bearing = int(round(g.right_side_bearing + delta - g.left_side_bearing))
             g.width = target_width
 
-font.familyname = 'Komisch Mono'
 font.version = '1.0.0'
-font.comment = 'https://github.com/marcelhas/komisch-mono-font'
-font.copyright = 'https://github.com/marcelhas/komisch-mono-font/blob/master/LICENSE'
+font.comment = 'https://github.com/salif/komiki-mono'
+font.copyright = 'https://github.com/salif/komiki-mono/blob/main/LICENSE'
+font.sfnt_names = []
 
-adjust_height(font, ref, 0.875)
-font.sfnt_names = [] # Get rid of 'Prefered Name' etc.
-font.fontname = 'KomischMono-Regular'
-font.fullname = 'Komisch Mono Regular'
+font.familyname = 'Komiki Mono Shanns'
+font.fontname = 'KomikiMonoShanns-Regular'
+font.fullname = 'Komiki Mono Shanns Regular'
+font.generate(f'{OUTDIR}/Komiki-mono-shanns.{EXT}')
+
+adjust_height(font, ref, 1.125)
+font.familyname = 'Komiki Mono'
+font.fontname = 'KomikiMono-Regular'
+font.fullname = 'Komiki Mono Regular'
 font.weight = 'Normal'
 font.os2_weight = 400
-font.generate(f'{OUTDIR}/komisch-mono-regular.ttf')
-
-font.selection.all()
-font.fontname = 'KomischMono-Bold'
-font.fullname = 'Komisch Mono Bold'
-font.weight = 'Bold'
-font.os2_weight = 700
-font.changeWeight(32, "LCG", 0, 0, "squish")
-font.generate(f'{OUTDIR}/komisch-mono-bold.ttf')
+font.generate(f'{OUTDIR}/Komiki-mono-regular.{EXT}')

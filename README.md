@@ -1,22 +1,19 @@
-# Komisch Mono
+# Komiki Mono
 
 [Comic Mono](https://github.com/dtinth/comic-mono-font) fork using
 [Comic Shanns v2](https://github.com/shannpersand/comic-shanns) as base with 
-[ligatures](https://github.com/ToxicFrog/Ligaturizer), umlauts, diacritics and most [Nerdfont symbols](https://github.com/ryanoasis/nerd-fonts/).
+[ligatures](https://github.com/ToxicFrog/Ligaturizer).
 
-The font family is called `Komisch Mono`.
+The font family is called `Komiki Mono`.
 
-## Preview
-
-![Font Preview](images/komisch-mono-preview.png)
 
 ## Rebuild
 
-> Requires Nix.
+> Requires `just`.
 
 ```sh
-nix build
-# Fonts are inside `./result`.
+just ligature_font_file='' build
+# Fonts are inside `./output`.
 ```
 
 ## License and Attributions
@@ -24,4 +21,4 @@ nix build
 This project is released under the MIT license.
 Check out the [LICENSE](LICENSE) file for more information.
 
-[Neo Comic Mono](https://github.com/jptrzy/neo-comic-mono-font) was used as reference for the nix file.
+[Komisch Mono](https://github.com/jptrzy/neo-comic-mono-font) was used as reference.
