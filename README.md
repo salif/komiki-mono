@@ -12,18 +12,24 @@ The font family is called `Komiki Mono`.
 - [KomikiMono-Bold.otf](https://github.com/salif/komiki-mono/releases/download/v1.2024.812/KomikiMono-Bold.otf)
 - [KomikiMonoZero-Regular.otf](https://github.com/salif/komiki-mono/releases/download/v1.2024.812/KomikiMonoZero-Regular.otf)
 
+## Preview
+
+![Font Preview](preview.png)
+
 ## Development
 
-> Requires `just`.
+Requires `just` and `ligaturizer`.
 
 ```sh
-just ligature_font_file='' build
-# Fonts are inside `./output`.
+just --set ligature_font_file \
+    /usr/share/fonts/OTF/FiraCode-Regular.otf build
 ```
+
+Fonts are inside `./output`.
 
 ## License and Attributions
 
 This project is released under the MIT license.
 Check out the [LICENSE](LICENSE) file for more information.
 
-[Komisch Mono](https://github.com/jptrzy/neo-comic-mono-font) was used as reference.
+[Komisch Mono](https://github.com/marcelhas/komisch-mono-font) was used as reference.
