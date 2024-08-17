@@ -4,18 +4,30 @@
 [Comic Shanns v2](https://github.com/shannpersand/comic-shanns) as base with 
 [ligatures](https://github.com/ToxicFrog/Ligaturizer).
 
-The font family is called `Komiki Mono`.
+The font families are called `Komiki Mono` and `Komiki Mono Zero`.
 
 ## Download
 
-- [Komiki Mono Regular](https://github.com/salif/komiki-mono/releases/download/v1.2024.813/KomikiMono-Regular.otf)
-- [Komiki Mono Bold](https://github.com/salif/komiki-mono/releases/download/v1.2024.813/KomikiMono-Bold.otf)
 - [Komiki Mono Zero Regular](https://github.com/salif/komiki-mono/releases/download/v1.2024.813/KomikiMonoZero-Regular.otf)
 - [Komiki Mono Zero Bold](https://github.com/salif/komiki-mono/releases/download/v1.2024.813/KomikiMonoZero-Bold.otf)
+- [Komiki Mono Regular](https://github.com/salif/komiki-mono/releases/download/v1.2024.813/KomikiMono-Regular.otf)
+- [Komiki Mono Bold](https://github.com/salif/komiki-mono/releases/download/v1.2024.813/KomikiMono-Bold.otf)
 
 ## Preview
 
 ![Font Preview](preview.png)
+
+## Recommended settings
+
+### Visual Studio Code
+
+```json
+{
+    "editor.fontFamily": "'Komiki Mono Zero', monospace",
+    "editor.fontSize": 14.5,
+    "editor.fontLigatures": true
+}
+```
 
 ## Development
 
